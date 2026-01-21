@@ -22,6 +22,7 @@
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="google-signin-client_id" content="1089416550452-8t2j7pghh0guba92hg8nl4romvkt945c.apps.googleusercontent.com">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="i_p_league">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
@@ -34,5 +35,27 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmMyuYSaSiWYtxxNMh_zAZotK5wJgxv20",
+      authDomain: "i-p-league.firebaseapp.com",
+      projectId: "i-p-league",
+      storageBucket: "i-p-league.firebasestorage.app",
+      messagingSenderId: "1089416550452",
+      appId: "1:1089416550452:web:623bd0ed25ca0cab999261"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
 </body>
 </html>

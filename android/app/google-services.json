@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1089416550452",
+    "project_id": "i-p-league",
+    "storage_bucket": "i-p-league.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089416550452:android:d0a25f241fb4b8ff999261",
+        "android_client_info": {
+          "package_name": "com.example.i_p_league"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089416550452-eragp3hvg32qqqc56sr9o39737shi3l9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.i_p_league",
+            "certificate_hash": "ce4eb08778913f38490e38862c4e9edb89521d26"
+          }
+        },
+        {
+          "client_id": "1089416550452-b2th49a902a0duf1oce3nuusgjtn5p4q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1Ck-HmtXdZpxEhyxzQYFex0SqWpkLkHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089416550452-8t2j7pghh0guba92hg8nl4romvkt945c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
