@@ -1,9 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:i_p_league/presentation/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/repositories/auth_repository.dart';
-import '../../data/services/auth_service.dart';
 import '../state/auth_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -83,15 +81,11 @@ class ProfileScreen extends StatelessWidget {
                         child: const Text('Cancel'),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChangeNotifierProvider(
-                              create: (BuildContext context) =>
-                                  AuthenProvider(AuthRepository(AuthService())),
-                              child: const LoginScreen(),
-                            ),
-                          ),
-                        ),
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
                         child: const Text('Log out'),
                       ),
                     ],

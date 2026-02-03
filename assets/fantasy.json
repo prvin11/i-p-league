@@ -1,0 +1,594 @@
+{
+    "teams": [
+        {
+            "team_name": "GHOST",
+            "players": [
+                {
+                    "HARDIK PANDYA (VC)": 0
+                },
+                {
+                    "T NATRAJAN": 0
+                },
+                {
+                    "AXAR PATEL (C)": 0
+                },
+                {
+                    "RAHUL TEWATIA": 0
+                },
+                {
+                    "KARUN NAIR": 0
+                },
+                {
+                    "NEHAL WADHERA": 0
+                },
+                {
+                    "SWAPNIL SINGH": 0
+                },
+                {
+                    "WILL JACKS": 0
+                },
+                {
+                    "HARSHIT RANA": 0
+                },
+                {
+                    "SIMARJEET SINGH": 0
+                },
+                {
+                    "PRABHSIMRAN SINGH": 0
+                },
+                {
+                    "RAHMANULLAH GURBAZ": 0
+                },
+                {
+                    "HARRY BROOK": 0
+                },
+                {
+                    "BRYDON CARSE": 0
+                },
+                {
+                    "KAMINDU MENDIS": 0
+                },
+                {
+                    "AJINKYA RAHANE": 0
+                },
+                {
+                    "ANSHUL KAMBOJ": 0
+                },
+                {
+                    "BEVON JOHN JACOBS": 0
+                }
+            ]
+        },
+        {
+            "team_name": "STATPAD KINGS",
+            "players": [
+                {
+                    "RAJAT PATIDAR": 0
+                },
+                {
+                    "PHIL SALT (C)": 0
+                },
+                {
+                    "RAHUL CHAHAR": 0
+                },
+                {
+                    "ANGKRISH RAGUVANSHI": 0
+                },
+                {
+                    "JAKE FRASER MCGURK": 0
+                },
+                {
+                    "TUSHAR DEHPANDE": 0
+                },
+                {
+                    "SPENCER JOHNSON": 0
+                },
+                {
+                    "ADAM ZAMPA": 0
+                },
+                {
+                    "ROBIN MINZ": 0
+                },
+                {
+                    "NICHOLAS POORAN": 0
+                },
+                {
+                    "SHASHANK SINGH": 0
+                },
+                {
+                    "ASHUTOSH SHARMA": 0
+                },
+                {
+                    "SAI KISHORE": 0
+                },
+                {
+                    "YUZVENDRA CHAHAL (VC)": 0
+                },
+                {
+                    "MUKESH CHOUDARY": 0
+                },
+                {
+                    "MAYANK YADAV": 0
+                },
+                {
+                    "RAVI BISHNOI": 0
+                },
+                {
+                    "LIZAAD WILLIAMS": 0
+                }
+            ]
+        },
+        {
+            "team_name": "EDGED 'N' TAKEN",
+            "players": [
+                {
+                    "TRENT BOULT (VC)": 0
+                },
+                {
+                    "YASHASVI JAISWAL (C)": 0
+                },
+                {
+                    "MOHIT SHARMA": 0
+                },
+                {
+                    "FAZALAQ FAROOQI": 0
+                },
+                {
+                    "ANDRE RUSSEL": 0
+                },
+                {
+                    "RYAN RICKLETON": 0
+                },
+                {
+                    "SANDEEP SHARMA": 0
+                },
+                {
+                    "NUWAN THUSHARA": 0
+                },
+                {
+                    "SUNIL NARINE": 0
+                },
+                {
+                    "VAIBHAV SURYAVANSHI": 0
+                },
+                {
+                    "SAI SUDHARSAN": 0
+                },
+                {
+                    "ADBDUL SAMAD": 0
+                },
+                {
+                    "RAMANDEEP SINGH": 0
+                },
+                {
+                    "SHREYAS GOPAL": 0
+                },
+                {
+                    "VISHNU VINOD": 0
+                },
+                {
+                    "LUNGI NGIDI": 0
+                },
+                {
+                    "SIDHARTH": 0
+                },
+                {
+                    "DUSHMANTH CHAMEERA": 0
+                }
+            ]
+        },
+        {
+            "team_name": "REBELS",
+            "players": [
+                {
+                    "JASPRIT BUMRAH": 0
+                },
+                {
+                    "RUTURAJ GAIKWAD (C)": 0
+                },
+                {
+                    "ISHAN KISHAN (VC)": 0
+                },
+                {
+                    "KHALLEL AHMED": 0
+                },
+                {
+                    "NOOR AHMAD": 0
+                },
+                {
+                    "TIM DAVID": 0
+                },
+                {
+                    "SHABAZ AHMED": 0
+                },
+                {
+                    "WANINDU HASARANGA": 0
+                },
+                {
+                    "FAF DU PLESIS": 0
+                },
+                {
+                    "AARON HARDIE": 0
+                },
+                {
+                    "THILAK VARMA": 0
+                },
+                {
+                    "SHUBHAM DUBEY": 0
+                },
+                {
+                    "SAMEER RIZVI": 0
+                },
+                {
+                    "KULDEEP YADAV": 0
+                },
+                {
+                    "MAPHAKA": 0
+                },
+                {
+                    "KULDEEP SEN": 0
+                },
+                {
+                    "SUYASH SHARMA": 0
+                },
+                {
+                    "SURYANSH SHEDGE": 0
+                }
+            ]
+        },
+        {
+            "team_name": "AUSSIE AANDAIS",
+            "players": [
+                {
+                    "MITCHELL STARC": 0
+                },
+                {
+                    "RISHAB PANT": 0
+                },
+                {
+                    "PRASIDH KRISHNA": 0
+                },
+                {
+                    "JOSH HAZLEWOOD": 0
+                },
+                {
+                    "VIJAY SHANKAR": 0
+                },
+                {
+                    "GLENN MAXWELL": 0
+                },
+                {
+                    "RAVICHANDRAN ASHWIN": 0
+                },
+                {
+                    "JOSH INGLIS": 0
+                },
+                {
+                    "WASHINGTON SUNDAR": 0
+                },
+                {
+                    "ROMARIO SHEPHERD": 0
+                },
+                {
+                    "MITCHELL SANTNER": 0
+                },
+                {
+                    "DEEPAK HOODA": 0
+                },
+                {
+                    "SHIVAM DUBE": 0
+                },
+                {
+                    "NITISH KUMAR REDDY (VC)": 0
+                },
+                {
+                    "MITCHELL MARSH (C)": 10
+                },
+                {
+                    "KARIM JANET": 0
+                },
+                {
+                    "YUVRAJ CHOUDHARY": 0
+                },
+                {
+                    "ARSHIN KULKARNI": 0
+                }
+            ]
+        },
+        {
+            "team_name": "SOUTHERN DERBY",
+            "players": [
+                {
+                    "KL RAHUL (C)": 0
+                },
+                {
+                    "SHIMRON HETMEYER": 0
+                },
+                {
+                    "MOHAMMAD SIRAJ": 0
+                },
+                {
+                    "MATHEESHA PATHIRANA": 0
+                },
+                {
+                    "NITHISH RANA": 0
+                },
+                {
+                    "RAVINDRA JADEJA (VC)": 0
+                },
+                {
+                    "SANJU SAMSON": 0
+                },
+                {
+                    "GERALD COETZEE": 0
+                },
+                {
+                    "KAGISO RABADA": 0
+                },
+                {
+                    "ABISHEK POREL": 0
+                },
+                {
+                    "RIYAN PARAG": 0
+                },
+                {
+                    "MAHIPAL LOMROR": 0
+                },
+                {
+                    "JAYADEV UNDAKAT": 0
+                },
+                {
+                    "SHAIK RASHEED": 0
+                },
+                {
+                    "REECE TOPLEY": 0
+                },
+                {
+                    "MOSHIN KHAN": 0
+                },
+                {
+                    "JAYANT YADAV": 0
+                },
+                {
+                    "DONAVAN FEREIRA": 0
+                }
+            ]
+        },
+        {
+            "team_name": "TEAM uniQ",
+            "players": [
+                {
+                    "MAHENDRA SINGH DHONI": 0
+                },
+                {
+                    "RASHID KHAN": 0
+                },
+                {
+                    "SHUBMAN GILL (C)": 0
+                },
+                {
+                    "GLENN PHILIPS": 0
+                },
+                {
+                    "LOCKIE FERGUSON": 0
+                },
+                {
+                    "AIDEN MARKRAM": 0
+                },
+                {
+                    "AKASH MADHWAL": 0
+                },
+                {
+                    "ISHANT SHARMA": 0
+                },
+                {
+                    "MUJEEB UHR RAHMAN": 0
+                },
+                {
+                    "ANRICH NORTJE": 0
+                },
+                {
+                    "RAHUL TRIPATHI": 0
+                },
+                {
+                    "AYUSH BADONI": 0
+                },
+                {
+                    "MARCUS STOINIS": 0
+                },
+                {
+                    "BHUVNESHWAR KUMAR": 0
+                },
+                {
+                    "PATRICK CUMMINS": 0
+                },
+                {
+                    "ANUJ RAWAT": 0
+                },
+                {
+                    "ANDRE SIDDARTH": 0
+                },
+                {
+                    "VENKATESH IYER (VC)": 0
+                }
+            ]
+        },
+        {
+            "team_name": "TEAM SELFLESS",
+            "players": [
+                {
+                    "DAVID MILLER": 0
+                },
+                {
+                    "AVESH KHAN": 0
+                },
+                {
+                    "NAMAN DHIR": 0
+                },
+                {
+                    "LIAM LIVINGSTONE": 0
+                },
+                {
+                    "MOEEN ALI": 0
+                },
+                {
+                    "MOHAMMAD SHAMI": 0
+                },
+                {
+                    "TRISTAIN STUBBS": 0
+                },
+                {
+                    "SAM CURRAN": 0
+                },
+                {
+                    "KUMAR KARTHIKEYA SINGH": 0
+                },
+                {
+                    "QUINTON DE KOCK": 0
+                },
+                {
+                    "SURYA KUMAR YADAV": 0
+                },
+                {
+                    "ABISHEK SHARMA (C)": 0
+                },
+                {
+                    "ATHARVA TAIDE": 0
+                },
+                {
+                    "HARPREET BRAR": 0
+                },
+                {
+                    "HARSHAL PATEL": 0
+                },
+                {
+                    "DEEPAK CHAHAR": 0
+                },
+                {
+                    "ARSHDEEP SINGH (VC)": 0
+                },
+                {
+                    "MANISH PANDEY": 0
+                }
+            ]
+        },
+        {
+            "team_name": "TEAM DNB",
+            "players": [
+                {
+                    "JOS BUTTLER": 0
+                },
+                {
+                    "VIRAT KOHLI (C)": 0
+                },
+                {
+                    "ROHIT SHARMA": 0
+                },
+                {
+                    "NATHAN ELLIS": 0
+                },
+                {
+                    "KRUNAL PANDYA": 0
+                },
+                {
+                    "HEINRICH KLAASEN": 0
+                },
+                {
+                    "DEVDUTT PADIKKAL": 0
+                },
+                {
+                    "JACOB BETHEL": 0
+                },
+                {
+                    "YASH DAYAL": 0
+                },
+                {
+                    "DHRUV JUREL": 0
+                },
+                {
+                    "SHERFANE RUTHERFORD": 0
+                },
+                {
+                    "TRAVIS HEAD (VC)": 0
+                },
+                {
+                    "ANUKUL ROY": 0
+                },
+                {
+                    "UMRAN MALIK": 0
+                },
+                {
+                    "RASIKH DHAR": 0
+                },
+                {
+                    "KARN SHARMA": 0
+                },
+                {
+                    "BARTLETT": 0
+                },
+                {
+                    "MUSHEER KHAN": 0
+                }
+            ]
+        },
+        {
+            "team_name": "MISSION SIXERS",
+            "players": [
+                {
+                    "SHREYAS IYER (C)": 0
+                },
+                {
+                    "DEVON CONWAY": 0
+                },
+                {
+                    "JOFRA ARCHER": 0
+                },
+                {
+                    "SHAMAR JOSEPH": 0
+                },
+                {
+                    "JITESH SHARMA": 0
+                },
+                {
+                    "MUKESH KUMAR": 0
+                },
+                {
+                    "AZMATULLAH OMARZAI": 0
+                },
+                {
+                    "MAHESH THEEKSHANA": 0
+                },
+                {
+                    "RINKU SINGH": 0
+                },
+                {
+                    "MARCO JANSEN": 0
+                },
+                {
+                    "ABHINAV MANOHAR": 0
+                },
+                {
+                    "VAIBHAV ARORA": 0
+                },
+                {
+                    "VARUN CHAKRAVARTHY (VC)": 0
+                },
+                {
+                    "SHARUKH KHAN": 0
+                },
+                {
+                    "MANOH BANDAGE": 0
+                },
+                {
+                    "PRIYANSH ARYA": 0
+                },
+                {
+                    "ROVMAN POWELL": 0
+                },
+                {
+                    "MATHTHEW BREETZKE": 0
+                }
+            ]
+        }
+    ]
+}

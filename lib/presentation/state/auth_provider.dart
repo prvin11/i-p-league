@@ -54,22 +54,6 @@ class AuthenProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signInWithGoogle() async {
-    isLoading = true;
-    notifyListeners();
-
-    try {
-      await _repo.signInWithGoogle();
-    } catch (e) {
-      isLoading = false;
-      notifyListeners();
-      rethrow;
-    }
-
-    isLoading = false;
-    notifyListeners();
-  }
-
   Future<void> logout() async {
     isLoading = true;
     notifyListeners();

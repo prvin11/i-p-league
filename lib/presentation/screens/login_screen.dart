@@ -26,52 +26,105 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          return SafeArea(
-            child: Consumer<AuthenProvider>(
-              builder: (context, authProvider, child) {
-                return SingleChildScrollView(
-                  child: Column(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/login_bg.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            return SafeArea(
+              child: Consumer<AuthenProvider>(
+                builder: (context, authProvider, child) {
+                  return Column(
                     children: [
-                      Container(
-                        color: Colors.blue,
-                        height: 200,
-                        width: MediaQuery.of(context).size.width,
-                        child: const Center(
-                          child: Text(
-                            "Gully11",
-                            style: TextStyle(fontSize: 32, color: Colors.white),
-                          ),
+                      const SizedBox(height: 100),
+                      const Text(
+                        "Gully 11",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Login to Your Account",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const SizedBox(height: 300),
+                      SizedBox(
+                        width: 300,
+                        height: 50,
                         child: TextField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
                             labelText: 'Email',
-                            border: OutlineInputBorder(),
+                            labelStyle: const TextStyle(color: Colors.white70),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white30,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white30,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.1),
+                            prefixIcon: const Icon(
+                              Icons.email,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 300,
+                        height: 50,
                         child: TextField(
                           controller: _passwordController,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
                             labelText: 'Password',
-                            border: OutlineInputBorder(),
+                            labelStyle: const TextStyle(color: Colors.white70),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white30,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white30,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.1),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
                       ),
@@ -82,19 +135,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
                               children: [
                                 LoginButton(
                                   onPressed: () async {
                                     try {
-                                      await context.read<AuthenProvider>().login(
-                                        _emailController.text.trim(),
-                                        _passwordController.text.trim(),
-                                      );
+                                      await context
+                                          .read<AuthenProvider>()
+                                          .login(
+                                            _emailController.text.trim(),
+                                            _passwordController.text.trim(),
+                                          );
                                     } catch (e) {
                                       if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Login failed: $e')),
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Login failed: $e'),
+                                          ),
                                         );
                                       }
                                     }
@@ -102,60 +162,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 20),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Divider(height: 30),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                "or continue with",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: ElevatedButton.icon(
-                                  onPressed: () async {
-                                    try {
-                                      await context
-                                          .read<AuthenProvider>()
-                                          .signInWithGoogle();
-                                    } catch (e) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('Google sign-in failed: $e'),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                                  icon: const Icon(Icons.account_circle),
-                                  label: const Text('Sign in with Google'),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: Colors.black87,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
-                                    side: const BorderSide(color: Colors.grey),
-                                  ),
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                     ],
-                  ),
-                );
-              },
-            ),
-          );
-        },
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
+
+
