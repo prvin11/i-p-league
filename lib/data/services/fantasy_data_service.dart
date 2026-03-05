@@ -59,9 +59,11 @@ class FantasyDataService {
                     isCaptain: isCaptain,
                     isVC: isVC,
                     points: basePoints,
+                    iplTeam: '',
                   ),
                   basePoints,
                 ),
+                iplTeam: '',
               ),
             );
           });
