@@ -99,7 +99,7 @@ class FirestoreService {
   /// Stream a single team (realtime updates) from the Teams document.
   static Stream<Team> getTeamStream(String teamName) {
     return _db.collection('Teams').doc(teamName).snapshots().map((doc) {
-      final data = doc.data() as Map<String, dynamic>? ?? {};
+      final data = doc.data() ?? {};
       final players = <Player>[];
 
       data.forEach((key, value) {
@@ -116,5 +116,60 @@ class FirestoreService {
       final overall = players.fold<double>(0.0, (sum, p) => sum + p.points);
       return Team(name: teamName, players: players, overallPoints: overall);
     });
+  }
+
+  /// Update a player's name and points in a team document.
+  /// This deletes the old player entry and creates a new one with the updated name and points.
+  static Future<void> updatePlayerNameAndPoints(
+    String teamName,
+    String oldPlayerName,
+    String newPlayerName,
+    double newPoints,
+  ) async {
+    try {
+      final docRef = _db.collection('Teams').doc(teamName);
+      
+      // If name changed, delete old entry and create new one
+      if (oldPlayerName != newPlayerName) {
+        await docRef.update({
+          oldPlayerName: FieldValue.delete(),
+          newPlayerName: newPoints,
+        });
+      } else {
+        // Only points changed
+        await docRef.update({newPlayerName: newPoints});
+      }
+    } catch (e) {
+      print('Error updating player in $teamName: $e');
+      rethrow;
+    }
+  }
+
+  /// Delete a player from a team document.
+  static Future<void> deletePlayer(String teamName, String playerName) async {
+    try {
+      await _db.collection('Teams').doc(teamName).update({
+        playerName: FieldValue.delete(),
+      });
+    } catch (e) {
+      print('Error deleting player $playerName from $teamName: $e');
+      rethrow;
+    }
+  }
+
+  /// Add a new player to a team document.
+  static Future<void> addPlayer(
+    String teamName,
+    String playerName,
+    double points,
+  ) async {
+    try {
+      await _db.collection('Teams').doc(teamName).update({
+        playerName: points,
+      });
+    } catch (e) {
+      print('Error adding player $playerName to $teamName: $e');
+      rethrow;
+    }
   }
 }

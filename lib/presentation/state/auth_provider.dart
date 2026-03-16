@@ -22,6 +22,14 @@ class AuthenProvider with ChangeNotifier {
     });
   }
 
+  String userDisplayName() {
+    if (_user != null && _user!.email != null) {
+      return _user!.email!.split('@')[0];
+    } else {
+      return 'Guest';
+    }
+  }
+
   Future<void> login(String email, String password) async {
     isLoading = true;
     notifyListeners();
