@@ -109,12 +109,29 @@ class FirestoreService {
           isCaptain: false,
           isVC: false,
           points: points,
-          iplTeam: '',
+          iplTeam: teamName,
         ));
       });
 
       final overall = players.fold<double>(0.0, (sum, p) => sum + p.points);
       return Team(name: teamName, players: players, overallPoints: overall);
+    });
+  }
+
+  /// Streams all players from all teams, sorted by points descending.
+  static Stream<List<Player>> getAllPlayersStream() {
+    return getTeamNamesStream().asyncExpand((teamNames) async* {
+      final allPlayers = <Player>[];
+
+      for (final teamName in teamNames) {
+        final team = await getTeamByName(teamName);
+        allPlayers.addAll(team.players
+            .map((p) => p.copyWith(iplTeam: teamName))
+            .toList());
+      }
+
+      allPlayers.sort((a, b) => b.points.compareTo(a.points));
+      yield allPlayers;
     });
   }
 

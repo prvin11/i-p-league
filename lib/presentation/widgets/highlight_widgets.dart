@@ -60,7 +60,9 @@ class ErrorHighlightWidget extends StatelessWidget {
 }
 
 class LoadingHighlightWidget extends StatelessWidget {
-  const LoadingHighlightWidget({super.key});
+  const LoadingHighlightWidget({super.key, required this.loadingMessage});
+
+  final String loadingMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +72,13 @@ class LoadingHighlightWidget extends StatelessWidget {
         color: Colors.grey[900],
         borderRadius: BorderRadius.circular(16),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(color: Colors.orange),
             SizedBox(height: 16),
-            Text('Loading Teams...', style: TextStyle(color: Colors.white70)),
+            Text(loadingMessage, style: TextStyle(color: Colors.white70)),
           ],
         ),
       ),

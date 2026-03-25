@@ -21,7 +21,7 @@ class _AdminPanelState extends State<AdminPanel> {
       stream: getTeamsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return LoadingHighlightWidget();
+          return LoadingHighlightWidget(loadingMessage: 'Loading Teams...');
         }
         if (snapshot.hasError) {
           return ErrorHighlightWidget(errorMessage: snapshot.error!);

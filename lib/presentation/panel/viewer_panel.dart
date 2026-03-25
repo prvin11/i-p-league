@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:i_p_league/presentation/widgets/Leaderboard_tile.dart';
-import 'package:i_p_league/presentation/widgets/highlight_widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/repositories/auth_repository.dart';
+import '../../data/services/auth_service.dart';
+import '../../utils/admin_panel_helper.dart';
+import '../screens/leaderboard_screen.dart';
+import '../screens/our_players_screen.dart';
+import '../screens/players_screen.dart';
 import '../state/auth_provider.dart';
 import '../../core/constants/colors.dart';
-import '../../data/services/firestore_service.dart';
-import '../../data/models/team.dart';
 
 class ViewerPanel extends StatefulWidget {
   const ViewerPanel({super.key});
@@ -16,44 +18,6 @@ class ViewerPanel extends StatefulWidget {
 }
 
 class _ViewerPanelState extends State<ViewerPanel> {
-  Stream<List<Team>> _getTeamsStream() {
-    return FirestoreService.getTeamNamesStream().asyncExpand((
-      teamNames,
-    ) async* {
-      final List<Team> teams = [];
-      for (final name in teamNames) {
-        final team = await FirestoreService.getTeamByName(name);
-        teams.add(team);
-      }
-      yield teams;
-    });
-  }
-
-  Widget _buildTeamsSection() {
-    return StreamBuilder<List<Team>>(
-      stream: _getTeamsStream(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return LoadingHighlightWidget();
-        }
-        if (snapshot.hasError) {
-          return ErrorHighlightWidget(errorMessage: snapshot.error!);
-        }
-
-        final teams = snapshot.data ?? [];
-        if (teams.isEmpty) {
-          return NoTeamsHighlightWidget();
-        }
-
-        // sort teams by overall points descending for leaderboard-style
-        final sortedTeams = [...teams]
-          ..sort((a, b) => b.overallPoints.compareTo(a.overallPoints));
-
-        return LeaderboardTile(teams: sortedTeams, mounted: mounted);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,7 +138,7 @@ class _ViewerPanelState extends State<ViewerPanel> {
                     Icon(Icons.groups, color: Colors.orange.shade400, size: 24),
                     const SizedBox(width: 8),
                     Text(
-                      'Leaderboard',
+                      'Features',
                       style: TextStyle(
                         color: stitchWhite,
                         fontSize: 22,
@@ -184,12 +148,60 @@ class _ViewerPanelState extends State<ViewerPanel> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildTeamsSection(),
+                _buildCardWrapWidget(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCardWrapWidget() {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        buildFeatureCard(
+          context: context,
+          title: 'Leaderboards',
+          subtitle: 'View top-ranked teams and points table',
+          icon: Icons.emoji_events,
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const LeaderboardsPage()));
+          },
+        ),
+        buildFeatureCard(
+          context: context,
+          title: 'Overall Players',
+          subtitle: 'See scores of all players in the league',
+          icon: Icons.people_alt,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const OverallPlayersPage()),
+            );
+          },
+        ),
+        buildFeatureCard(
+          context: context,
+          title: 'Our Player Details',
+          subtitle: 'Check your selected player performance',
+          icon: Icons.person_search,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ChangeNotifierProvider(
+                  create: (BuildContext context) =>
+                      AuthenProvider(AuthRepository(AuthService())),
+                  child: const PlayerDetailsPage(),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
