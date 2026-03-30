@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:i_p_league/core/constants/colors.dart';
-import 'package:i_p_league/data/services/firestore_service.dart';
+import 'package:gully_11/core/constants/colors.dart';
+import 'package:gully_11/data/services/firestore_service.dart';
 
 import '../data/models/team.dart';
 
@@ -85,6 +85,8 @@ void showEditPlayerDialog(
   final pointsController = TextEditingController(
     text: currentPoints.toString(),
   );
+  final matchdayController = TextEditingController();
+  final matchdayPointsController = TextEditingController();
 
   showDialog(
     context: context,
@@ -121,13 +123,53 @@ void showEditPlayerDialog(
             TextField(
               controller: pointsController,
               style: const TextStyle(color: stitchWhite),
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Total Points (read-only)',
+                labelStyle: const TextStyle(color: Colors.white70),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.orange),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.orange, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.leaderboard, color: Colors.orange),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: matchdayController,
+              style: const TextStyle(color: stitchWhite),
+              keyboardType: const TextInputType.numberWithOptions(decimal: false),
+              decoration: InputDecoration(
+                labelText: 'Matchday',
+                labelStyle: const TextStyle(color: Colors.white70),
+                hintText: 'Enter matchday number (1-25)',
+                hintStyle: const TextStyle(color: Colors.white38),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.orange),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.orange, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.calendar_today, color: Colors.orange),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: matchdayPointsController,
+              style: const TextStyle(color: stitchWhite),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
               decoration: InputDecoration(
-                labelText: 'Points',
+                labelText: 'Matchday Points',
                 labelStyle: const TextStyle(color: Colors.white70),
-                hintText: 'Enter points',
+                hintText: 'Enter points for this matchday',
                 hintStyle: const TextStyle(color: Colors.white38),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.orange),
@@ -153,8 +195,10 @@ void showEditPlayerDialog(
           TextButton(
             onPressed: () async {
               final newName = nameController.text.trim();
-              final newPoints =
-                  double.tryParse(pointsController.text.trim()) ?? 0.0;
+              final matchday = int.tryParse(matchdayController.text.trim());
+              final matchdayPoints =
+                  double.tryParse(matchdayPointsController.text.trim()) ??
+                      0.0;
 
               if (newName.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -166,12 +210,23 @@ void showEditPlayerDialog(
                 return;
               }
 
+              if (matchday == null || matchday < 1 || matchday > 25) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Matchday must be between 1 and 25'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
               try {
-                await FirestoreService.updatePlayerNameAndPoints(
+                await FirestoreService.updatePlayerMatchdayPoints(
                   teamName,
                   oldPlayerName,
                   newName,
-                  newPoints,
+                  matchday,
+                  matchdayPoints,
                 );
 
                 if (mounted) {

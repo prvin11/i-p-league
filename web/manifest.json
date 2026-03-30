@@ -1,11 +1,11 @@
 {
-    "name": "i_p_league",
-    "short_name": "i_p_league",
+    "name": "gully_11",
+    "short_name": "gully_11",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Turn your cricket passion into a winning experience! Create your dream team, join contests, and score points as your players perform in real matches. Challenge friends, climb leaderboards, and prove you’re the real cricket expert.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

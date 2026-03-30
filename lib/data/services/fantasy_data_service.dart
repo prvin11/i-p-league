@@ -1,28 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../utils/helper.dart';
 import '../models/team.dart';
 import '../models/player.dart';
 
 class FantasyDataService {
-  /// Calculate points based on player role (Captain, VC, or Regular)
-  static double _calculatePlayerPoints(Player player, double basePoints) {
-    if (player.isCaptain) {
-      return basePoints * 2.0; // Captain: 2x multiplier
-    } else if (player.isVC) {
-      return basePoints * 1.5; // Vice-Captain: 1.5x multiplier
-    } else {
-      return basePoints * 1.0; // Regular player: 1x multiplier
-    }
-  }
-
   /// Load fantasy data from JSON file
   static Future<List<Team>> loadFantasyData() async {
     try {
-      final 
-      
-      uri = Uri.parse(
-        'https://prvin11.github.io/host_api/fantasy.json',
-      );
+      final uri = Uri.parse('https://prvin11.github.io/host_api/fantasy.json');
       final response = await http.get(uri);
       final Map<String, dynamic> jsonData = json.decode(response.body);
 
@@ -34,35 +20,22 @@ class FantasyDataService {
 
         for (var playerData in playersJson) {
           // Each player is a Map with playerName: points
-          playerData.forEach((playerName, points) {
+          playerData.forEach((name, points) {
             // Extract captain/VC status from player name
-            bool isCaptain = playerName.toString().contains('(C)');
-            bool isVC = playerName.toString().contains('(VC)');
+            bool isCaptain = name.contains('(C)');
+            bool isVC = name.contains('(VC)');
 
-            // Clean player name
-            String cleanName = playerName
-                .toString()
-                .replaceAll('(C)', '')
-                .replaceAll('(VC)', '')
-                .trim();
+            final String playerName = name.toString();
 
             double basePoints = (points as num?)?.toDouble() ?? 0.0;
 
             players.add(
               Player(
-                name: cleanName,
+                name: playerName,
                 isCaptain: isCaptain,
                 isVC: isVC,
-                points: _calculatePlayerPoints(
-                  Player(
-                    name: cleanName,
-                    isCaptain: isCaptain,
-                    isVC: isVC,
-                    points: basePoints,
-                    iplTeam: '',
-                  ),
-                  basePoints,
-                ),
+                matchdayPoints: {},
+                points: calculatePlayerPoints(isCaptain, isVC, basePoints),
                 iplTeam: '',
               ),
             );

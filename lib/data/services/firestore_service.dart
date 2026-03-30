@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gully_11/utils/helper.dart';
 import '../models/player.dart';
 import '../models/team.dart';
 
@@ -26,33 +27,93 @@ class FirestoreService {
   }
 
   /// Fetch a single fantasy team by name.
-  /// In the 'Teams' collection each team document has player names as
-  /// fields; the field value is the player's points (number).
+  /// Teams can be in legacy flat format (playerName: points) or new nested format:
+  /// players: { playerName: { matchdayPoints: {1: 10.0, ...}, totalPoints: 70.0 } }
   static Future<Team> getTeamByName(String teamName) async {
     try {
-      final DocumentSnapshot doc =
-          await _db.collection('Teams').doc(teamName).get();
+      final DocumentSnapshot doc = await _db
+          .collection('Teams')
+          .doc(teamName)
+          .get();
       if (!doc.exists) {
         return Team(name: teamName, players: [], overallPoints: 0.0);
       }
 
-      final data = doc.data() as Map<String, dynamic>? ?? {};
+      final data = (doc.data() as Map<String, dynamic>?) ?? {};
       final players = <Player>[];
 
-      data.forEach((key, value) {
-        final points = value.toDouble();
-        players.add(
-          Player(
-            name: key,
-            isCaptain: false,
-            isVC: false,
-            points: points,
-            iplTeam: '',
-          ),
-        );
-      });
+      if (data.containsKey('players') && data['players'] is Map) {
+        final rawPlayers = Map<String, dynamic>.from(data['players'] as Map);
+        rawPlayers.forEach((playerName, playerData) {
+          final isCaptain = playerName.contains('(C)');
+          final isVC = playerName.contains('(VC)');
+          if (playerData is num) {
+            players.add(
+              Player(
+                name: playerName,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: {},
+                points: (playerData).toDouble(),
+                iplTeam: '',
+              ),
+            );
+          } else if (playerData is Map) {
+            final map = Map<String, dynamic>.from(playerData);
+            final rawMatchdayPoints = map['matchdayPoints'];
+            final matchdayPoints = <int, double>{};
 
-      final overall = players.fold<double>(0.0, (sum, p) => sum + p.points);
+            if (rawMatchdayPoints is Map) {
+              rawMatchdayPoints.forEach((k, v) {
+                final idx = int.tryParse(k.toString());
+                if (idx != null) {
+                  matchdayPoints[idx] = (v as num?)?.toDouble() ?? 0.0;
+                }
+              });
+            }
+
+            final totalPoints =
+                (map['totalPoints'] as num?)?.toDouble() ??
+                matchdayPoints.values.fold<double>(
+                  0.0,
+                  (double sum, double v) => sum + v,
+                );
+
+            players.add(
+              Player(
+                name: playerName,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: matchdayPoints,
+                points: totalPoints,
+                iplTeam: '',
+              ),
+            );
+          }
+        });
+      } else {
+        data.forEach((key, value) {
+          final isCaptain = key.contains('(C)');
+          final isVC = key.contains('(VC)');
+          if (value is num) {
+            players.add(
+              Player(
+                name: key,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: {},
+                points: value.toDouble(),
+                iplTeam: '',
+              ),
+            );
+          }
+        });
+      }
+
+      final overall = players.fold<double>(
+        0.0,
+        (double sum, Player p) => sum + calculatePlayerPoints(p.isCaptain, p.isVC, p.points),
+      );
       return Team(name: teamName, players: players, overallPoints: overall);
     } catch (e) {
       print('Error fetching team $teamName: $e');
@@ -72,12 +133,12 @@ class FirestoreService {
 
   /// Update a single player's points in a team document.
   static Future<void> updatePlayerPoints(
-      String teamName, String playerName, double points) async {
+    String teamName,
+    String playerName,
+    double points,
+  ) async {
     try {
-      await _db
-          .collection('Teams')
-          .doc(teamName)
-          .update({playerName: points});
+      await _db.collection('Teams').doc(teamName).update({playerName: points});
     } catch (e) {
       print('Error updating $playerName in $teamName: $e');
       rethrow;
@@ -87,7 +148,9 @@ class FirestoreService {
   /// Replace an entire team document with given playerPoints map.
   /// keys are player names, values are point totals.
   static Future<void> setTeamPoints(
-      String teamName, Map<String, double> playerPoints) async {
+    String teamName,
+    Map<String, double> playerPoints,
+  ) async {
     try {
       await _db.collection('Teams').doc(teamName).set(playerPoints);
     } catch (e) {
@@ -102,18 +165,78 @@ class FirestoreService {
       final data = doc.data() ?? {};
       final players = <Player>[];
 
-      data.forEach((key, value) {
-        final points = (value as num?)?.toDouble() ?? 0.0;
-        players.add(Player(
-          name: key,
-          isCaptain: false,
-          isVC: false,
-          points: points,
-          iplTeam: teamName,
-        ));
-      });
+      if (data.containsKey('players') && data['players'] is Map) {
+        final rawPlayers = Map<String, dynamic>.from(data['players'] as Map);
+        rawPlayers.forEach((playerName, playerData) {
+          final isCaptain = playerName.contains('(C)');
+          final isVC = playerName.contains('(VC)');
+          if (playerData is num) {
+            players.add(
+              Player(
+                name: playerName,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: {},
+                points: playerData.toDouble(),
+                iplTeam: teamName,
+              ),
+            );
+          } else if (playerData is Map) {
+            final map = Map<String, dynamic>.from(playerData);
+            final rawMatchdayPoints = map['matchdayPoints'];
+            final matchdayPoints = <int, double>{};
 
-      final overall = players.fold<double>(0.0, (sum, p) => sum + p.points);
+            if (rawMatchdayPoints is Map) {
+              rawMatchdayPoints.forEach((k, v) {
+                final idx = int.tryParse(k.toString());
+                if (idx != null) {
+                  matchdayPoints[idx] = (v as num?)?.toDouble() ?? 0.0;
+                }
+              });
+            }
+
+            final totalPoints =
+                (map['totalPoints'] as num?)?.toDouble() ??
+                matchdayPoints.values.fold<double>(
+                  0.0,
+                  (double sum, double v) => sum + v,
+                );
+
+            players.add(
+              Player(
+                name: playerName,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: matchdayPoints,
+                points: totalPoints,
+                iplTeam: teamName,
+              ),
+            );
+          }
+        });
+      } else {
+        data.forEach((key, value) {
+          final isCaptain = key.contains('(C)');
+          final isVC = key.contains('(VC)');
+          if (value is num) {
+            players.add(
+              Player(
+                name: key,
+                isCaptain: isCaptain,
+                isVC: isVC,
+                matchdayPoints: {},
+                points: value.toDouble(),
+                iplTeam: teamName,
+              ),
+            );
+          }
+        });
+      }
+
+      final overall = players.fold<double>(
+        0.0,
+        (double sum, Player p) => sum + calculatePlayerPoints(p.isCaptain, p.isVC, p.points),
+      );
       return Team(name: teamName, players: players, overallPoints: overall);
     });
   }
@@ -125,9 +248,9 @@ class FirestoreService {
 
       for (final teamName in teamNames) {
         final team = await getTeamByName(teamName);
-        allPlayers.addAll(team.players
-            .map((p) => p.copyWith(iplTeam: teamName))
-            .toList());
+        allPlayers.addAll(
+          team.players.map((p) => p.copyWith(iplTeam: teamName)).toList(),
+        );
       }
 
       allPlayers.sort((a, b) => b.points.compareTo(a.points));
@@ -135,8 +258,70 @@ class FirestoreService {
     });
   }
 
-  /// Update a player's name and points in a team document.
-  /// This deletes the old player entry and creates a new one with the updated name and points.
+  /// Update a player's matchday score and keep totalPoints up to date.
+  static Future<void> updatePlayerMatchdayPoints(
+    String teamName,
+    String oldPlayerName,
+    String newPlayerName,
+    int matchday,
+    double matchdayPoints,
+  ) async {
+    if (matchday < 1 || matchday > 25) {
+      throw ArgumentError('Matchday must be between 1 and 25');
+    }
+
+    final docRef = _db.collection('Teams').doc(teamName);
+    final snap = await docRef.get();
+    final data = snap.data() ?? {};
+
+    Map<String, dynamic> playersMap = {};
+    if (data.containsKey('players') && data['players'] is Map) {
+      playersMap = Map<String, dynamic>.from(data['players'] as Map);
+    } else {
+      // Legacy format: top-level keys are players with total points.
+      data.forEach((key, value) {
+        if (value is num) {
+          playersMap[key] = {
+            'matchdayPoints': {},
+            'totalPoints': (value).toDouble(),
+          };
+        }
+      });
+    }
+
+    final oldRecord = playersMap[oldPlayerName];
+
+    Map<int, double> matchdayMap = {};
+    if (oldRecord is Map) {
+      final existingMatchdays = oldRecord['matchdayPoints'];
+      if (existingMatchdays is Map) {
+        existingMatchdays.forEach((k, v) {
+          final idx = int.tryParse(k.toString());
+          if (idx != null) {
+            matchdayMap[idx] = (v as num?)?.toDouble() ?? 0.0;
+          }
+        });
+      }
+    }
+
+    matchdayMap[matchday] = matchdayPoints;
+    final newTotal = matchdayMap.values.fold(0.0, (sum, v) => sum + v);
+
+    final updatedRecord = {
+      'matchdayPoints': matchdayMap.map((k, v) => MapEntry(k.toString(), v)),
+      'totalPoints': newTotal,
+    };
+
+    if (oldPlayerName != newPlayerName) {
+      playersMap.remove(oldPlayerName);
+    }
+    playersMap[newPlayerName] = updatedRecord;
+
+    await docRef.set({'players': playersMap}, SetOptions(merge: true));
+  }
+
+  /// Update a player's name and total points in a team document.
+  /// Keeps backward compatibility with legacy one-value format.
   static Future<void> updatePlayerNameAndPoints(
     String teamName,
     String oldPlayerName,
@@ -145,16 +330,51 @@ class FirestoreService {
   ) async {
     try {
       final docRef = _db.collection('Teams').doc(teamName);
-      
-      // If name changed, delete old entry and create new one
-      if (oldPlayerName != newPlayerName) {
-        await docRef.update({
-          oldPlayerName: FieldValue.delete(),
-          newPlayerName: newPoints,
-        });
+      final snap = await docRef.get();
+      final data = snap.data() ?? {};
+
+      if (data.containsKey('players')) {
+        final playersMap = Map<String, dynamic>.from(data['players'] as Map);
+        final oldRecord = playersMap[oldPlayerName];
+
+        Map<int, double> matchdayMap = {};
+        if (oldRecord is Map && oldRecord['matchdayPoints'] is Map) {
+          (oldRecord['matchdayPoints'] as Map).forEach((k, v) {
+            final idx = int.tryParse(k.toString());
+            if (idx != null) {
+              matchdayMap[idx] = (v as num?)?.toDouble() ?? 0.0;
+            }
+          });
+        }
+
+        // preserve matchdayPoints if present; otherwise, set a default matchday 1 value
+        if (matchdayMap.isEmpty) {
+          matchdayMap[1] = newPoints;
+        }
+
+        final updatedRecord = {
+          'matchdayPoints': matchdayMap.map(
+            (k, v) => MapEntry(k.toString(), v),
+          ),
+          'totalPoints': newPoints,
+        };
+
+        if (oldPlayerName != newPlayerName) {
+          playersMap.remove(oldPlayerName);
+        }
+        playersMap[newPlayerName] = updatedRecord;
+
+        await docRef.set({'players': playersMap}, SetOptions(merge: true));
       } else {
-        // Only points changed
-        await docRef.update({newPlayerName: newPoints});
+        // Legacy direct format
+        if (oldPlayerName != newPlayerName) {
+          await docRef.update({
+            oldPlayerName: FieldValue.delete(),
+            newPlayerName: newPoints,
+          });
+        } else {
+          await docRef.update({newPlayerName: newPoints});
+        }
       }
     } catch (e) {
       print('Error updating player in $teamName: $e');
@@ -165,9 +385,18 @@ class FirestoreService {
   /// Delete a player from a team document.
   static Future<void> deletePlayer(String teamName, String playerName) async {
     try {
-      await _db.collection('Teams').doc(teamName).update({
-        playerName: FieldValue.delete(),
-      });
+      final docRef = _db.collection('Teams').doc(teamName);
+      final snap = await docRef.get();
+      final data = snap.data() ?? {};
+
+      if (data.containsKey('players') && data['players'] is Map) {
+        final playersMap = Map<String, dynamic>.from(data['players'] as Map);
+        playersMap.remove(playerName);
+        await docRef.set({'players': playersMap}, SetOptions(merge: true));
+      } else {
+        // Legacy format
+        await docRef.update({playerName: FieldValue.delete()});
+      }
     } catch (e) {
       print('Error deleting player $playerName from $teamName: $e');
       rethrow;
@@ -181,9 +410,18 @@ class FirestoreService {
     double points,
   ) async {
     try {
-      await _db.collection('Teams').doc(teamName).update({
-        playerName: points,
-      });
+      final docRef = _db.collection('Teams').doc(teamName);
+      final snap = await docRef.get();
+      final data = snap.data() ?? {};
+
+      if (data.containsKey('players') && data['players'] is Map) {
+        final playersMap = Map<String, dynamic>.from(data['players'] as Map);
+        playersMap[playerName] = {'matchdayPoints': {}, 'totalPoints': points};
+        await docRef.set({'players': playersMap}, SetOptions(merge: true));
+      } else {
+        // Legacy one-value format
+        await docRef.update({playerName: points});
+      }
     } catch (e) {
       print('Error adding player $playerName to $teamName: $e');
       rethrow;

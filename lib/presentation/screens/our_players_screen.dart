@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:i_p_league/presentation/widgets/highlight_widgets.dart';
+import 'package:gully_11/presentation/widgets/highlight_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:i_p_league/core/constants/colors.dart';
-import 'package:i_p_league/data/models/team.dart';
-import 'package:i_p_league/data/services/firestore_service.dart';
-import 'package:i_p_league/presentation/state/auth_provider.dart';
+import 'package:gully_11/core/constants/colors.dart';
+import 'package:gully_11/data/models/team.dart';
+import 'package:gully_11/data/services/firestore_service.dart';
+import 'package:gully_11/presentation/state/auth_provider.dart';
+import 'player_matchday_detail_screen.dart';
 
 class PlayerDetailsPage extends StatelessWidget {
   const PlayerDetailsPage({super.key});
@@ -24,7 +25,7 @@ class PlayerDetailsPage extends StatelessWidget {
 
     final lowerTeams = teamNames.map((t) => t.toLowerCase()).toList();
     final exactContains = lowerTeams.firstWhere(
-      (t) => t == localPart || t.contains(localPart) || localPart.contains(t),
+      (t) => t == localPart || (t.contains(localPart) && localPart.contains(t)),
       orElse: () => '',
     );
 
@@ -54,8 +55,11 @@ class PlayerDetailsPage extends StatelessWidget {
       backgroundColor: bgColor,
       appBar: AppBar(
         iconTheme: IconThemeData(color: stitchWhite),
-        title: const Text('Our Player Details', style: TextStyle(color: stitchWhite)),
-        backgroundColor: Colors.black87,
+        title: const Text(
+          'Our Player Details',
+          style: TextStyle(color: stitchWhite),
+        ),
+        backgroundColor: bgColor,
         elevation: 0,
       ),
       body: StreamBuilder<List<String>>(
@@ -105,45 +109,78 @@ class PlayerDetailsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final player = sortedPlayers[index];
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade900.withOpacity(0.85),
-                      border: Border.all(
-                        color: Colors.orange.shade600,
-                        width: 1,
-                      ),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor: index < 3
-                            ? Colors.amber.shade700
-                            : Colors.orange,
-                        child: Text('${index + 1}'),
-                      ),
-                      title: Text(
-                        player.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PlayerMatchdayDetailScreen(
+                            player: player,
+                            teamName: team.name,
+                          ),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade900.withOpacity(0.85),
+                        border: Border.all(
+                          color: Colors.orange.shade600,
+                          width: 1,
                         ),
                       ),
-                      subtitle: Text(
-                        'Team: ${team.name}',
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      trailing: Text(
-                        player.points.toStringAsFixed(1),
-                        style: TextStyle(
-                          color: player.points >= 50
-                              ? Colors.greenAccent
-                              : Colors.orangeAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        leading: CircleAvatar(
+                          backgroundColor: index < 3
+                              ? Colors.amber.shade700
+                              : Colors.orange,
+                          child: Text(
+                            '${index + 1}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          player.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Team: ${team.name} • Matches: ${player.matchdayPoints.length}',
+                          style: const TextStyle(color: Colors.white70),
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Points',
+                              style: const TextStyle(
+                                color: Colors.white60,
+                                fontSize: 10,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              player.points.toStringAsFixed(1),
+                              style: TextStyle(
+                                color: player.points >= 50
+                                    ? Colors.greenAccent
+                                    : Colors.orangeAccent,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

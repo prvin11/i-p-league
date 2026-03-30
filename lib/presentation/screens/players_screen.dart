@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:i_p_league/data/models/player.dart';
-import 'package:i_p_league/data/services/firestore_service.dart';
-import 'package:i_p_league/core/constants/colors.dart';
-import 'package:i_p_league/presentation/widgets/highlight_widgets.dart';
+import 'package:gully_11/data/models/player.dart';
+import 'package:gully_11/data/services/firestore_service.dart';
+import 'package:gully_11/core/constants/colors.dart';
+import 'package:gully_11/presentation/widgets/highlight_widgets.dart';
 
 import '../widgets/Players_tile.dart';
 
@@ -16,7 +16,7 @@ class OverallPlayersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Overall Players', style: TextStyle(color: stitchWhite)),
         iconTheme: IconThemeData(color: stitchWhite),
-        backgroundColor: Colors.black87,
+        backgroundColor: bgColor,
       ),
       body: StreamBuilder<List<Player>>(
         stream: FirestoreService.getAllPlayersStream(),

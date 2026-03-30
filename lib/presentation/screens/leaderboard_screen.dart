@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:i_p_league/data/services/firestore_service.dart';
+import 'package:gully_11/data/services/firestore_service.dart';
 
 import '../../core/constants/colors.dart';
 import '../../data/models/team.dart';
-import '../widgets/Leaderboard_tile.dart';
+import '../widgets/viewer_leaderboard_tile.dart';
 import '../widgets/highlight_widgets.dart';
 
 class LeaderboardsPage extends StatefulWidget {
@@ -47,7 +47,7 @@ class _LeaderboardsPageState extends State<LeaderboardsPage> {
         final sortedTeams = [...teams]
           ..sort((a, b) => b.overallPoints.compareTo(a.overallPoints));
 
-        return LeaderboardTile(teams: sortedTeams, mounted: mounted);
+        return ViewerLeaderboardTile(teams: sortedTeams, mounted: mounted);
       },
     );
   }
@@ -59,7 +59,7 @@ class _LeaderboardsPageState extends State<LeaderboardsPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: stitchWhite),
         title: const Text('Leaderboards', style: TextStyle(color: stitchWhite)),
-        backgroundColor: Colors.black87,
+        backgroundColor: bgColor,
         elevation: 0,
       ),
       body: Container(
@@ -67,7 +67,7 @@ class _LeaderboardsPageState extends State<LeaderboardsPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [bgColor, bgColor.withOpacity(0.8), Colors.black87],
+            colors: [bgColor, bgColor.withOpacity(0.8), bgColor],
           ),
         ),
         child: SingleChildScrollView(

@@ -20,6 +20,10 @@ class ViewerPanel extends StatefulWidget {
 class _ViewerPanelState extends State<ViewerPanel> {
   @override
   Widget build(BuildContext context) {
+    final String teamName = context
+        .read<AuthenProvider>()
+        .userDisplayName()
+        .toUpperCase();
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -37,7 +41,7 @@ class _ViewerPanelState extends State<ViewerPanel> {
             ),
           ],
         ),
-        backgroundColor: Colors.black87,
+        backgroundColor: bgColor,
         elevation: 0,
         actions: [
           Row(
@@ -45,12 +49,14 @@ class _ViewerPanelState extends State<ViewerPanel> {
               Icon(Icons.person, color: Colors.orange.shade300, size: 16),
               const SizedBox(width: 6),
               Text(
-                context.read<AuthenProvider>().userDisplayName().toUpperCase(),
+                teamName,
                 style: const TextStyle(color: stitchWhite, fontSize: 12),
               ),
             ],
           ),
+          SizedBox(width: 10),
           IconButton(
+            tooltip: 'Logout',
             icon: const Icon(Icons.logout, color: stitchWhite),
             onPressed: () async {
               await context.read<AuthenProvider>().logout();
@@ -63,7 +69,7 @@ class _ViewerPanelState extends State<ViewerPanel> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [bgColor, bgColor.withOpacity(0.8), Colors.black87],
+            colors: [bgColor, bgColor.withOpacity(0.8), bgColor],
           ),
         ),
         child: SingleChildScrollView(
@@ -107,7 +113,7 @@ class _ViewerPanelState extends State<ViewerPanel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Welcome Back!',
+                              'Welcome $teamName',
                               style: TextStyle(
                                 color: Colors.orange.shade300,
                                 fontSize: 16,
